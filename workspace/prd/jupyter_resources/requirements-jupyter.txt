@@ -1,0 +1,11 @@
+black[jupyter]==22.10.0
+jupyterlab-s3-browser==0.12.0
+jupyterlab-code-formatter==1.5.3
+jedi-language-server==0.37.0
+jupyterlab-lsp==3.10.2
+jupyterlab-system-monitor==0.8.0
+jupyterlab-git==0.39.3
+jupyterlab-theme-solarized-dark==2.1.0
+jupyter-scheduler==0.4.1
+snowflake-connector-python==2.8.0
+apache-airflow-providers-postgres==4.1.0

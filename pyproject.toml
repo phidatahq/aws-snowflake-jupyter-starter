@@ -1,0 +1,72 @@
+[project]
+name = "aws-snowflake-dp"
+version = "0.1.0"
+requires-python = ">3.7"
+readme = "README.md"
+authors = [
+  {name = "Data Team", email = "data@team.com"}
+]
+
+dependencies = [
+    "awswrangler",
+    "boto3",
+    "ipython",
+    "pandas",
+    "papermill",
+    "phidata>=0.2.19",
+    "requests",
+    "sqlalchemy",
+]
+
+[project.optional-dependencies]
+dev = [
+    "black[jupyter]",
+    "mypy",
+    "pytest",
+    "psycopg2-binary",
+    "types-requests",
+]
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["workflows", "workspace", "notebooks"]
+
+# Exclude secrets from the package
+# https://setuptools.pypa.io/en/latest/userguide/datafiles.html#exclude-package-data
+[tool.setuptools.exclude-package-data]
+workspace = ["secrets"]
+
+# Update this value if the workspace directory is renamed.
+# [tool.phidata]
+# workspace = "workspace"
+
+[tool.mypy]
+check_untyped_defs = true
+no_implicit_optional = true
+warn_unused_configs = true
+exclude = [
+    "dpenv*",
+    "dpenvdev*",
+    "workspace/dev/airflow_resources/*",
+    "workspace/prd/airflow_resources/*",
+    "workspace/dev/superset_resources/*",
+    "workspace/prd/superset_resources/*",
+]
+
+[[tool.mypy.overrides]]
+module = [
+    "airflow",
+    "airflow.*",
+    "phidata",
+    "phidata.*",
+    "pandas.*",
+    "setuptools",
+    "setuptools.*",
+    "sqlalchemy",
+    "sqlalchemy.*",
+    "requests",
+]
+ignore_missing_imports = true

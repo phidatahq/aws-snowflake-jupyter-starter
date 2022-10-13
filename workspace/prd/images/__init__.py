@@ -1,0 +1,71 @@
+from phidata.infra.docker.resource.image import DockerImage
+from workspace.settings import (
+    ws_name,
+    use_cache,
+    airflow_enabled,
+    superset_enabled,
+    jupyter_enabled,
+    data_platform_dir_path,
+)
+
+# -*- Prd images
+
+prd_images = []
+# Shared image params
+image_tag = "prd"
+image_repo = "phidata"
+image_suffix = "aws-snow-dp"  # Set to ws_name when using your own images
+build_docker_images = False  # Set to True to build images locally
+skip_docker_cache = False  # Skip docker cache when building images
+pull_docker_images = False  # Force pull images during FROM
+push_docker_images = False  # Push images to repo after building
+
+# Airflow image
+prd_airflow_image = DockerImage(
+    name=f"{image_repo}/airflow-{image_suffix}",
+    tag=image_tag,
+    path=str(data_platform_dir_path),
+    dockerfile="workspace/prd/images/airflow.Dockerfile",
+    print_build_log=True,
+    pull=pull_docker_images,
+    push_image=push_docker_images,
+    skip_docker_cache=skip_docker_cache,
+    # use_cache=False will recreate the image every time you run `phi ws up`
+    # eg: `CACHE=f phi ws up`
+    use_cache=use_cache,
+)
+
+if build_docker_images and airflow_enabled:
+    prd_images.append(prd_airflow_image)
+
+# Superset image
+prd_superset_image = DockerImage(
+    name=f"{image_repo}/superset-{image_suffix}",
+    tag=image_tag,
+    path=str(data_platform_dir_path),
+    dockerfile="workspace/prd/images/superset.Dockerfile",
+    print_build_log=True,
+    pull=pull_docker_images,
+    push_image=push_docker_images,
+    skip_docker_cache=skip_docker_cache,
+    use_cache=use_cache,
+)
+
+if build_docker_images and superset_enabled:
+    prd_images.append(prd_superset_image)
+
+# Jupyter image
+prd_jupyter_image = DockerImage(
+    name=f"{image_repo}/jupyter-{image_suffix}",
+    tag=image_tag,
+    path=str(data_platform_dir_path),
+    dockerfile="workspace/prd/images/jupyter.Dockerfile",
+    print_build_log=True,
+    pull=pull_docker_images,
+    push_image=push_docker_images,
+    skip_docker_cache=skip_docker_cache,
+    use_cache=use_cache,
+)
+
+if build_docker_images and jupyter_enabled:
+    prd_images.append(prd_jupyter_image)
