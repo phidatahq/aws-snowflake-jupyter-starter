@@ -18,7 +18,7 @@ image_repo = "phidata"  # Set your image repo
 image_suffix = ws_name  # Set your image name suffix
 skip_docker_cache = False  # Skip docker cache when building images
 pull_docker_images = False  # Force pull images during FROM
-push_docker_images = True  # Push images to repo after building
+push_docker_images = False  # Push images to repo after building
 
 # Airflow image
 prd_airflow_image = DockerImage(

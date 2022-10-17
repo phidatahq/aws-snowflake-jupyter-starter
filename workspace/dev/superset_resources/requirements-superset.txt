@@ -1,2 +1,2 @@
-# pyathena==2.14.0
-# snowflake-sqlalchemy==1.4.2
+typing-extensions<4,>=3.10
+snowflake-sqlalchemy==1.2.4
