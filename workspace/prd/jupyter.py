@@ -22,7 +22,7 @@ aws_skip_delete: bool = False
 # EbsVolume for jupyter
 prd_jupyter_ebs_volume = EbsVolume(
     name=f"jupyter-{prd_key}",
-    size=32,
+    size=16,
     availability_zone=aws_az,
     tags=prd_tags,
     skip_delete=aws_skip_delete,

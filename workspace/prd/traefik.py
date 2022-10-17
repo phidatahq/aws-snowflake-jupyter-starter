@@ -8,7 +8,8 @@ from workspace.settings import (
     jupyter_enabled,
     traefik_enabled,
 )
-from workspace.prd.aws_resources import prd_aws_dp_certificate
+
+# from workspace.prd.aws_resources import prd_aws_dp_certificate
 from workspace.prd.airflow import prd_airflow_ws, prd_airflow_flower
 from workspace.prd.superset import prd_superset_ws
 from workspace.prd.jupyter import prd_jupyter
@@ -103,7 +104,7 @@ traefik_ingress_route = IngressRoute(
     # Use ACM certificate to enable HTTPS
     forward_web_to_websecure=True,
     # Read ACM certificate from a summary file and add the certificate ARN to the service_annotations
-    acm_certificate_summary_file=prd_aws_dp_certificate.certificate_summary_file,
+    # acm_certificate_summary_file=prd_aws_dp_certificate.certificate_summary_file,
     # Use a LoadBalancer service
     service_type=ServiceType.LOAD_BALANCER,
     # Configure the LoadBalancer using annotations:
@@ -112,11 +113,10 @@ traefik_ingress_route = IngressRoute(
         # reference: https://kubernetes.io/docs/concepts/services-networking/service/#aws-nlb-support
         "service.beta.kubernetes.io/aws-load-balancer-type": "nlb",
         "service.beta.kubernetes.io/aws-load-balancer-nlb-target-type": "ip",
-        # This LoadBalancer is internet-facing. Set internal = false
+        # To make the load balancer internal. Set internal = "true"
         # reference: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
-        "service.beta.kubernetes.io/aws-load-balancer-internal": "false",
-        # This annotation does not work with AWS but good to add for posterity
-        "service.beta.kubernetes.io/aws-load-balancer-name": traefik_name,
+        # "service.beta.kubernetes.io/aws-load-balancer-internal": "true",
+        # Other annotations: https://kubernetes-sigs.github.io/aws-load-balancer-controller/v2.2/guide/service/annotations/#annotations
     },
     # Enable traefik dashboard
     dashboard_enabled=True,

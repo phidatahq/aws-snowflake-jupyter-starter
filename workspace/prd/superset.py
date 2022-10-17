@@ -38,7 +38,7 @@ aws_skip_delete: bool = True
 # EbsVolume for superset-db
 prd_superset_db_volume = EbsVolume(
     name=f"superset-db-{prd_key}",
-    size=32,
+    size=16,
     availability_zone=aws_az,
     tags=prd_tags,
     skip_delete=aws_skip_delete,
@@ -46,7 +46,7 @@ prd_superset_db_volume = EbsVolume(
 # EbsVolume for superset-redis
 prd_superset_redis_volume = EbsVolume(
     name=f"superset-redis-{prd_key}",
-    size=16,
+    size=8,
     availability_zone=aws_az,
     tags=prd_tags,
     skip_delete=aws_skip_delete,

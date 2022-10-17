@@ -10,8 +10,8 @@ prd_env = "prd"
 prd_key = f"{ws_name}-{prd_env}"
 # Tags for prd resources
 prd_tags = {
-    "env": prd_env,
-    "project": ws_name,
+    "Env": prd_env,
+    "Project": ws_name,
 }
 # Domain for prd services like airflow and superset
 prd_domain = "aws-snow.com"
@@ -20,8 +20,6 @@ prd_domain = "aws-snow.com"
 
 # Production Subnets to use with the EKS cluster
 prd_subnets: List[str] = []
-# Production Security Groups to add to the EKS cluster
-prd_security_groups: List[str] = []
 
 # Node Group label for Services
 services_ng_label = {

@@ -11,14 +11,14 @@ from workspace.settings import (
 # -*- Prd images
 
 prd_images = []
+
 # Shared image params
 image_tag = "prd"
-image_repo = "phidata"
-image_suffix = "aws-snow-dp"  # Set to ws_name when using your own images
-build_docker_images = False  # Set to True to build images locally
+image_repo = "phidata"  # Set your image repo
+image_suffix = ws_name  # Set your image name suffix
 skip_docker_cache = False  # Skip docker cache when building images
 pull_docker_images = False  # Force pull images during FROM
-push_docker_images = False  # Push images to repo after building
+push_docker_images = True  # Push images to repo after building
 
 # Airflow image
 prd_airflow_image = DockerImage(
@@ -35,7 +35,7 @@ prd_airflow_image = DockerImage(
     use_cache=use_cache,
 )
 
-if build_docker_images and airflow_enabled:
+if airflow_enabled:
     prd_images.append(prd_airflow_image)
 
 # Superset image
@@ -51,7 +51,7 @@ prd_superset_image = DockerImage(
     use_cache=use_cache,
 )
 
-if build_docker_images and superset_enabled:
+if superset_enabled:
     prd_images.append(prd_superset_image)
 
 # Jupyter image
@@ -67,5 +67,5 @@ prd_jupyter_image = DockerImage(
     use_cache=use_cache,
 )
 
-if build_docker_images and jupyter_enabled:
+if jupyter_enabled:
     prd_images.append(prd_jupyter_image)

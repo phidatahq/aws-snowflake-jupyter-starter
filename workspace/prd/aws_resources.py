@@ -6,13 +6,12 @@ from phidata.infra.aws.resource.group import AwsResourceGroup
 from phidata.infra.aws.resource.s3.bucket import S3Bucket
 from phidata.infra.aws.resource.cloudformation.stack import CloudFormationStack
 
-from workspace.settings import ws_dir_path
+from workspace.settings import ws_dir_path, aws_az
 from workspace.prd.settings import (
     prd_key,
     prd_tags,
     prd_domain,
     prd_subnets,
-    prd_security_groups,
     services_ng_label,
     workers_ng_label,
 )
@@ -51,37 +50,32 @@ prd_data_s3_bucket = S3Bucket(
 # -*- EKS cluster
 prd_eks_cluster = EksCluster(
     name=f"{prd_key}-cluster",
-    # We use external subnets and security groups.
+    # Add subnets and security groups.
     resources_vpc_config={
         "subnetIds": prd_subnets,
-        "securityGroupIds": prd_security_groups,
     },
     # To use the prd_vpc_stack from above,
     # uncomment the line below and comment out the resources_vpc_config above
     # vpc_stack=prd_vpc_stack,
     tags=prd_tags,
     skip_delete=aws_skip_delete,
-    # Skip kubeconfig update because we generate a kubeconfig
-    # using the EksKubeconfig resource
-    update_kubeconfig=False,
+    # Manage kubeconfig separately using an EksKubeconfig resource
+    manage_kubeconfig=False,
 )
-prd_eks_kubeconfig = EksKubeconfig(
-    eks_cluster=prd_eks_cluster,
-    # uncomment this line to assume the "eks-admin.role" in the kubeconfig.
-    # Used by users not in the aws-auth configmap
-    # kubeconfig_role=eks_admin_role,
-)
+prd_eks_kubeconfig = EksKubeconfig(eks_cluster=prd_eks_cluster)
 
 # -*- EKS cluster nodegroup for running core services
 prd_services_eks_nodegroup = EksNodeGroup(
     name=f"{prd_key}-services-ng",
     min_size=1,
-    max_size=3,
+    max_size=2,
     desired_size=1,
-    disk_size=256,
-    subnets=prd_subnets,
+    disk_size=64,
+    instance_types=["m5a.xlarge"],
     eks_cluster=prd_eks_cluster,
-    instance_types=["m5.xlarge"],
+    # Run this nodegroup only in "us-east-1a"
+    subnet_az=aws_az,
+    # Add the services label to the nodegroup
     labels=services_ng_label,
     tags=prd_tags,
     skip_delete=aws_skip_delete,
@@ -91,30 +85,33 @@ prd_services_eks_nodegroup = EksNodeGroup(
 prd_worker_eks_nodegroup = EksNodeGroup(
     name=f"{prd_key}-workers-ng",
     min_size=1,
-    max_size=3,
+    max_size=2,
     desired_size=1,
-    disk_size=256,
-    subnets=prd_subnets,
+    disk_size=64,
+    instance_types=["m5a.xlarge"],
     eks_cluster=prd_eks_cluster,
-    instance_types=["m5.xlarge"],
+    # Run this nodegroup only in "us-east-1a"
+    subnet_az=aws_az,
+    # Add the workers label to the nodegroup
     labels=workers_ng_label,
     tags=prd_tags,
     skip_delete=aws_skip_delete,
 )
 
-# -*- ACM certificate for aws-dp.com
-prd_aws_dp_certificate = AcmCertificate(
-    name=prd_domain,
-    domain_name=prd_domain,
-    subject_alternative_names=[f"*.{prd_domain}"],
-    store_cert_summary=True,
-    certificate_summary_file=ws_dir_path.joinpath("aws", "acm", prd_domain),
-    skip_delete=aws_skip_delete,
-)
+# -*- ACM certificate for domain
+# Uncomment to create an ACM certificate for domain
+# prd_aws_dp_certificate = AcmCertificate(
+#     name=prd_domain,
+#     domain_name=prd_domain,
+#     subject_alternative_names=[f"*.{prd_domain}"],
+#     store_cert_summary=True,
+#     certificate_summary_file=ws_dir_path.joinpath("aws", "acm", prd_domain),
+#     skip_delete=aws_skip_delete,
+# )
 
 prd_aws_resources = AwsResourceGroup(
     name=prd_key,
-    acm_certificates=[prd_aws_dp_certificate],
+    # acm_certificates=[prd_aws_dp_certificate],
     s3_buckets=[prd_logs_s3_bucket, prd_data_s3_bucket],
     # cloudformation_stacks=[prd_vpc_stack],
     eks_cluster=prd_eks_cluster,
