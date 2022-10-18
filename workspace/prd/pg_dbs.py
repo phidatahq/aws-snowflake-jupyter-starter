@@ -12,7 +12,7 @@ from workspace.prd.settings import (
 # -*- AWS resources
 
 # Shared aws settings
-aws_skip_delete: bool = True
+aws_skip_delete: bool = False
 
 # -*- EbsVolumes
 # EbsVolume for pg-db
