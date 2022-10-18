@@ -148,6 +148,7 @@ prd_airflow_ws = AirflowWebserver(
     wait_for_db_init=True,
     # Use a LoadBalancer for webserver -- turn off when using traefik ingress
     ws_svc_type=ServiceType.LOAD_BALANCER,
+    ws_svc_port=80,
 )
 
 # Airflow scheduler

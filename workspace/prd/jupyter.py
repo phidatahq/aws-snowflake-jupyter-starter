@@ -56,6 +56,7 @@ prd_jupyter = JupyterLab(
     topology_spread_when_unsatisfiable=topology_spread_when_unsatisfiable,
     # Use a LoadBalancer for jupyter server -- turn off when using traefik ingress
     app_svc_type=ServiceType.LOAD_BALANCER,
+    app_svc_port=80,
 )
 
 prd_jupyter_apps = [prd_jupyter]
