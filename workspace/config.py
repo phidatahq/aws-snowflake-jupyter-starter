@@ -22,6 +22,6 @@ workspace = WorkspaceConfig(
     docker=[
         dev_docker_config,
         # Uncomment to use create prd docker images
-        prd_docker_config,
+        # prd_docker_config,
     ],
 )
