@@ -13,7 +13,7 @@ dependencies = [
     "ipython",
     "pandas",
     "papermill",
-    "phidata>=0.2.20",
+    "phidata>=0.2.21",
     "requests",
     "sqlalchemy",
 ]

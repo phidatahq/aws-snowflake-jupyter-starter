@@ -7,6 +7,7 @@ from phidata.app.airflow import (
     AirflowWorker,
     AirflowFlower,
     ImagePullPolicy,
+    ServiceType,
 )
 from phidata.app.postgres import PostgresDb, PostgresVolumeType
 from phidata.app.redis import Redis, RedisVolumeType
@@ -145,6 +146,8 @@ prd_airflow_ws = AirflowWebserver(
     # Settings to mark as false after first run
     # Wait for scheduler to initialize airflow db -- mark as false after first run
     wait_for_db_init=True,
+    # Use a LoadBalancer for webserver -- turn off when using traefik ingress
+    ws_svc_type=ServiceType.LOAD_BALANCER,
 )
 
 # Airflow scheduler
