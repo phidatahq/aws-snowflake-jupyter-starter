@@ -47,8 +47,8 @@ pandas==1.5.0
 papermill==2.4.0
 parso==0.8.3
 pexpect==4.8.0
-phidata==0.2.22
-phiterm==0.2.19
+phidata==0.2.23
+phiterm==0.2.23
 pickleshare==0.7.5
 prompt-toolkit==3.0.31
 ptyprocess==0.7.0
