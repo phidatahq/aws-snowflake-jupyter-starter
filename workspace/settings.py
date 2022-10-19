@@ -27,7 +27,6 @@ jupyter_enabled: bool = True
 airflow_enabled: bool = True
 traefik_enabled: bool = False
 whoami_enabled: bool = False
-databox_enabled: bool = False
 
 # -*- Settings using environment variables
 

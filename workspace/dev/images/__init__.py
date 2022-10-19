@@ -3,8 +3,8 @@ from workspace.settings import (
     ws_name,
     use_cache,
     airflow_enabled,
+    superset_enabled,
     jupyter_enabled,
-    databox_enabled,
     data_platform_dir_path,
 )
 
@@ -54,12 +54,12 @@ dev_jupyter_image = DockerImage(
 if jupyter_enabled:
     dev_images.append(dev_jupyter_image)
 
-# Databox image
-dev_databox_image = DockerImage(
-    name=f"{image_repo}/databox-{image_suffix}",
+# Superset image
+dev_superset_image = DockerImage(
+    name=f"{image_repo}/superset-{image_suffix}",
     tag=image_tag,
     path=str(data_platform_dir_path),
-    dockerfile="workspace/dev/images/databox.Dockerfile",
+    dockerfile="workspace/dev/images/superset.Dockerfile",
     print_build_log=True,
     pull=pull_docker_images,
     push_image=push_docker_images,
@@ -67,5 +67,5 @@ dev_databox_image = DockerImage(
     use_cache=use_cache,
 )
 
-if databox_enabled:
-    dev_images.append(dev_databox_image)
+if superset_enabled:
+    dev_images.append(dev_superset_image)

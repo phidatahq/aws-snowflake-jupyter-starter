@@ -3,9 +3,9 @@
 set -e
 
 CURR_SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-DOCKER_FILE="${CURR_SCRIPT_DIR}/databox.Dockerfile"
+DOCKER_FILE="${CURR_SCRIPT_DIR}/superset.Dockerfile"
 REPO="repo"
-NAME="databox-dp"
+NAME="superset-dp"
 TAG="dev"
 
 echo "Running: docker build -t $REPO/$NAME:$TAG -f $DOCKER_FILE ."

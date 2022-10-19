@@ -7,6 +7,7 @@ from phidata.app.superset import (
     SupersetInit,
 )
 
+from workspace.dev.images import dev_superset_image
 from workspace.settings import ws_name, ws_dir_path, use_cache, superset_enabled
 
 # -*- Docker resources
@@ -48,6 +49,8 @@ dev_superset_secrets_file: Path = ws_dir_path.joinpath(
 # Superset webserver
 dev_superset_ws = SupersetWebserver(
     enabled=superset_enabled,
+    image_name=dev_superset_image.name,
+    image_tag=dev_superset_image.tag,
     db_app=dev_superset_db,
     wait_for_db=wait_for_db,
     redis_app=dev_superset_redis,
@@ -73,6 +76,8 @@ dev_superset_ws = SupersetWebserver(
 superset_init_enabled = True  # Mark as False after first run
 dev_superset_init = SupersetInit(
     enabled=(superset_enabled and superset_init_enabled),
+    image_name=dev_superset_image.name,
+    image_tag=dev_superset_image.tag,
     db_app=dev_superset_db,
     wait_for_db=wait_for_db,
     redis_app=dev_superset_redis,
