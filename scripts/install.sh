@@ -25,9 +25,9 @@ main() {
   print_heading "Installing workspace ${ROOT_DIR} with [dev] extras"
   pip3 install --editable "${ROOT_DIR}[dev]"
 
-  print_heading "Installing airflow requirements without dependencies for code completion"
-  pip install --no-deps \
-    -r ${ROOT_DIR}/workspace/dev/airflow_resources/requirements-airflow.txt
+  # print_heading "Installing airflow requirements without dependencies for code completion"
+  # pip install --no-deps \
+  #   -r ${ROOT_DIR}/workspace/dev/airflow_resources/requirements-airflow.txt
 }
 
 main "$@"
