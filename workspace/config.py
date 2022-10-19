@@ -21,7 +21,6 @@ workspace = WorkspaceConfig(
     k8s=[prd_k8s_config],
     docker=[
         dev_docker_config,
-        # Uncomment to use create prd docker images
-        # prd_docker_config,
+        prd_docker_config,
     ],
 )

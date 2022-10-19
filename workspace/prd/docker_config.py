@@ -8,5 +8,6 @@ from workspace.prd.images import prd_images
 prd_docker_config = DockerConfig(
     env=prd_env,
     network=ws_name,
-    images=prd_images,
+    # uncomment the following line to build local images
+    # images=prd_images,
 )

@@ -19,6 +19,7 @@ dev_docker_config = DockerConfig(
     + dev_jupyter_apps
     + dev_superset_apps
     + dev_databox_apps,
-    images=dev_images,
+    # uncomment the following line to build local images
+    # images=dev_images,
     resources=[dev_traefik_resources],
 )
