@@ -8,12 +8,9 @@ authors = [
 ]
 
 dependencies = [
-    "awswrangler",
     "boto3",
-    "ipython",
     "pandas",
-    "papermill",
-    "phidata>=0.2.24",
+    "phidata>=0.2.25",
     "requests",
     "sqlalchemy",
 ]
