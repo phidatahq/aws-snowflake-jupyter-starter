@@ -10,12 +10,12 @@ from workflows.sql_dbs import PG_DB_APP, PG_DB_CONN_ID
 ##############################################################################
 
 # Step 1: Define tables for storing user activity and daily active users
-user_activity_table = PostgresTable(
+user_activity_pg = PostgresTable(
     name="user_activity",
     db_app=PG_DB_APP,
     airflow_conn_id=PG_DB_CONN_ID,
 )
-daily_active_users_table = PostgresTable(
+daily_active_users_pg = PostgresTable(
     name="daily_active_users",
     db_app=PG_DB_APP,
     airflow_conn_id=PG_DB_CONN_ID,
@@ -40,7 +40,7 @@ def load_user_activity(**kwargs) -> bool:
     _df.set_index("ds", inplace=True)
     print(_df.head())
 
-    return user_activity_table.write_pandas_df(_df, if_exists="replace")
+    return user_activity_pg.write_pandas_df(_df, if_exists="replace")
 
 
 # Step 3: Create task to calculate daily active users and write to postgres table
@@ -60,16 +60,16 @@ def load_daily_active_users(**kwargs) -> bool:
         SELECT
             ds,
             SUM(CASE WHEN is_active=1 THEN 1 ELSE 0 END) AS active_users
-        FROM {user_activity_table.name}
+        FROM {user_activity_pg.name}
         GROUP BY ds
         """,
-        con=user_activity_table.create_db_engine(),
+        con=user_activity_pg.create_db_engine(),
     )
     _df.reset_index(drop=True, inplace=True)
     _df.set_index("ds", inplace=True)
     print(_df.head())
 
-    return daily_active_users_table.write_pandas_df(_df, if_exists="replace")
+    return daily_active_users_pg.write_pandas_df(_df, if_exists="replace")
 
 
 # Step 4: Instantiate the tasks
@@ -78,16 +78,15 @@ load_dau = load_daily_active_users()
 
 # Step 5: Create a Workflow to run these tasks
 dau = Workflow(
-    name="dau_pg",
+    name="dau",
     tasks=[download_user_activity, load_dau],
     # the graph orders load_dau to run after download_user_activity
     graph={load_dau: [download_user_activity]},
     # the outputs of this workflow
-    outputs=[user_activity_table, daily_active_users_table],
+    outputs=[user_activity_pg, daily_active_users_pg],
 )
 
 # Step 6: Create a DAG to run the workflow on a schedule
 dag = dau.create_airflow_dag(
-    schedule_interval="@daily",
     is_paused_upon_creation=True,
 )

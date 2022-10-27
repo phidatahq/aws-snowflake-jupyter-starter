@@ -22,11 +22,10 @@ coins = [
 ]
 
 # Step 1: Define dataset for storing crypto price data
-crypto_prices_table = S3Dataset(
-    table=f"prices_hourly_{AIRFLOW_ENV}",
-    database="crypto",
+crypto_prices_daily_s3 = S3Dataset(
+    table=f"crypto_prices_daily_{AIRFLOW_ENV}",
     write_mode="overwrite_partitions",
-    partition_cols=["ds", "hr"],
+    partition_cols=["ds"],
     bucket=DATA_S3_BUCKET,
 )
 
@@ -66,23 +65,18 @@ def load_crypto_prices(**kwargs) -> bool:
     _df.reset_index(inplace=True)
     print(_df.head())
 
-    # crypto_prices_table.delete()
-    return crypto_prices_table.write_pandas_df(_df, create_database=False)
+    # crypto_prices_daily_s3.delete()
+    return crypto_prices_daily_s3.write_pandas_df(_df)
 
 
 # Step 3: Instantiate the task
 download_prices = load_crypto_prices()
 
 # Step 4: Create a Workflow to run these tasks
-crypto_prices = Workflow(
-    name="crypto_prices_aws",
+crypto_prices_daily = Workflow(
+    name="crypto_prices_daily_aws",
     tasks=[download_prices],
     # the output of this workflow
-    outputs=[crypto_prices_table],
+    outputs=[crypto_prices_daily_s3],
 )
 
-# Step 5: Create a DAG to run the workflow on a schedule
-dag = crypto_prices.create_airflow_dag(
-    schedule_interval="@daily",
-    is_paused_upon_creation=True,
-)

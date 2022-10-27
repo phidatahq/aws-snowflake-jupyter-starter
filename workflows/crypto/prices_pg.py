@@ -8,8 +8,8 @@ from phidata.utils.log import logger
 from workflows.sql_dbs import PG_DB_APP, PG_DB_CONN_ID
 
 ##############################################################################
-# A workflow to load hourly cryptocurrency price data to a
-# postgres table: `crypto_prices`
+# A workflow to loads daily cryptocurrency price data to a
+# postgres table: `crypto_prices_daily`
 ##############################################################################
 
 # List of coins to get prices for
@@ -22,15 +22,15 @@ coins = [
 ]
 
 # Step 1: Define a postgres table for storing crypto price data
-crypto_prices_table = PostgresTable(
-    name="prices_hourly",
-    db_schema="crypto",
+crypto_prices_daily_pg = PostgresTable(
+    name="crypto_prices_daily",
+    # use the connection URL from the dev_pg_db object
     db_app=PG_DB_APP,
+    # provide the connection ID used by airflow
     airflow_conn_id=PG_DB_CONN_ID,
 )
 
-
-# Step 2: Create tasks to load the crypto_prices table
+# Step 2: Create tasks to load the crypto_prices_daily_pg table
 # 2.1 Download price data
 @task
 def load_crypto_prices(**kwargs) -> bool:
@@ -69,7 +69,7 @@ def load_crypto_prices(**kwargs) -> bool:
 
     print(_df.head())
 
-    return crypto_prices_table.write_pandas_df(_df, if_exists="append")
+    return crypto_prices_daily_pg.write_pandas_df(_df, if_exists="append")
 
 
 # 2.2 Drop existing price data to prevent duplicates
@@ -85,12 +85,11 @@ def drop_existing_prices(**kwargs) -> bool:
 
     logger.info(f"Dropping rows for: ds={run_day}/hr={run_hour}")
     try:
-        crypto_prices_table.run_sql_query(
+        crypto_prices_daily_pg.run_sql_query(
             f"""
-            DELETE FROM {crypto_prices_table.name}
+            DELETE FROM {crypto_prices_daily_pg.name}
             WHERE
                 ds = '{run_day}'
-                AND hour = '{run_hour}'
             """
         )
     except Exception as e:
@@ -104,14 +103,14 @@ drop_prices = drop_existing_prices(enabled=False)
 
 # Step 4: Create a Workflow to run these tasks
 crypto_prices = Workflow(
-    name="crypto_prices_pg",
+    name="crypto_prices",
     tasks=[drop_prices, download_prices],
     # the graph orders download_prices to run after drop_prices
     graph={
         download_prices: [drop_prices],
     },
     # the output of this workflow
-    outputs=[crypto_prices_table],
+    outputs=[crypto_prices_daily_pg],
 )
 
 # Step 5: Create a DAG to run the workflow on a schedule

@@ -10,7 +10,7 @@ from phidata.utils.log import logger
 
 # Step 1: Define a File object for storing crypto price data
 # Path: `storage/crypto/crypto_prices.csv`
-crypto_prices = File(
+crypto_prices_file = File(
     name="crypto_prices.csv",
     file_dir="crypto",
 )
@@ -46,7 +46,7 @@ def download_crypto_prices(**kwargs) -> bool:
 
     print(_df.head())
 
-    return crypto_prices.write_pandas_df(_df)
+    return crypto_prices_file.write_pandas_df(_df)
 
 
 # Instantiate the task
