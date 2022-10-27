@@ -8,6 +8,7 @@ jupyterlab-system-monitor==0.8.0
 jupyterlab-git==0.39.3
 jupyterlab-theme-solarized-dark==2.1.0
 jupyter-scheduler==0.4.1
+snowflake-sqlalchemy==1.4.3
 snowflake-connector-python==2.8.0
 apache-airflow-providers-postgres==4.1.0
 apache-airflow-providers-papermill==3.0.0
