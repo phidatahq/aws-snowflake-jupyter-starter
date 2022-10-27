@@ -10,7 +10,7 @@ authors = [
 dependencies = [
     "boto3",
     "pandas",
-    "phidata>=0.2.30",
+    "phidata>=0.2.31",
     "requests",
     "sqlalchemy",
 ]
