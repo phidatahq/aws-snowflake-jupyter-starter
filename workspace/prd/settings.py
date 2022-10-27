@@ -14,7 +14,7 @@ prd_tags = {
     "Project": ws_name,
 }
 # Domain for prd services like airflow and superset
-prd_domain = "aws-snow.com"
+prd_domain = "aws-snow-dp.com"
 
 # -*- EKS settings
 

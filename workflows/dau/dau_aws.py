@@ -13,12 +13,14 @@ from workflows.buckets import DATA_S3_BUCKET
 # Step 1: Define datasets for storing user activity and daily active users
 user_activity_s3 = S3DatasetCsv(
     table=f"user_activity_{AIRFLOW_ENV}",
+    database="default",
     write_mode="overwrite_partitions",
     partition_cols=["ds"],
     bucket=DATA_S3_BUCKET,
 )
 daily_active_users_s3 = S3DatasetCsv(
     table=f"daily_active_users_{AIRFLOW_ENV}",
+    database="default",
     write_mode="overwrite_partitions",
     partition_cols=["ds"],
     bucket=DATA_S3_BUCKET,

@@ -25,8 +25,8 @@ pg_dbs_enabled: bool = True
 superset_enabled: bool = True
 jupyter_enabled: bool = True
 airflow_enabled: bool = True
-traefik_enabled: bool = False
-whoami_enabled: bool = False
+traefik_enabled: bool = True
+whoami_enabled: bool = True
 
 # -*- Settings using environment variables
 

@@ -119,9 +119,6 @@ prd_superset_ws = SupersetWebserver(
     topology_spread_key=topology_spread_key,
     topology_spread_max_skew=topology_spread_max_skew,
     topology_spread_when_unsatisfiable=topology_spread_when_unsatisfiable,
-    # Use a LoadBalancer for superset -- turn off when using traefik ingress
-    app_svc_type=ServiceType.LOAD_BALANCER,
-    app_svc_port=80,
 )
 
 # Superset init

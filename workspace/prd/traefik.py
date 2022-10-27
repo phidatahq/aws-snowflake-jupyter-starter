@@ -99,10 +99,10 @@ traefik_ingress_route = IngressRoute(
     enabled=traefik_enabled,
     web_enabled=True,
     web_routes=routes,
-    websecure_enabled=True,
-    websecure_routes=routes,
     # Use ACM certificate to enable HTTPS
-    forward_web_to_websecure=True,
+    # websecure_enabled=True,
+    # websecure_routes=routes,
+    # forward_web_to_websecure=True,
     # Read ACM certificate from a summary file and add the certificate ARN to the service_annotations
     # acm_certificate_summary_file=prd_aws_dp_certificate.certificate_summary_file,
     # Use a LoadBalancer service

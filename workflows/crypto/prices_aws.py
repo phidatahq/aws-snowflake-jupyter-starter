@@ -24,6 +24,7 @@ coins = [
 # Step 1: Define dataset for storing crypto price data
 crypto_prices_daily_s3 = S3Dataset(
     table=f"crypto_prices_daily_{AIRFLOW_ENV}",
+    database="default",
     write_mode="overwrite_partitions",
     partition_cols=["ds"],
     bucket=DATA_S3_BUCKET,
@@ -79,4 +80,3 @@ crypto_prices_daily = Workflow(
     # the output of this workflow
     outputs=[crypto_prices_daily_s3],
 )
-
