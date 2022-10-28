@@ -87,6 +87,6 @@ dau = Workflow(
 )
 
 # Step 6: Create a DAG to run the workflow on a schedule
-dag = dau.create_airflow_dag(
-    is_paused_upon_creation=True,
-)
+# dag = dau.create_airflow_dag(
+#     is_paused_upon_creation=True,
+# )
